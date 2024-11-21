@@ -99,5 +99,3 @@ Después de ordenar por las centenas:
 Salida esperada :[9, 15, 21, 35, 60, 72, 100]
 
 
-![image](https://github.com/user-attachments/assets/4f9c033b-6b29-4639-aae9-c89c72e4f638)
-
