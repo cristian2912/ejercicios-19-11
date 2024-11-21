@@ -98,4 +98,15 @@ Después de ordenar por las centenas:
 
 Salida esperada :[9, 15, 21, 35, 60, 72, 100]
 
+#Complejidad
 
+**pasos**
+
+Encontrar el máximo en una lista de longitud n tiene complejidad O(n)
+
+Dividir el número máximo M por 8 repetidamente tiene complejidad O(log 
+8 M), equivalente a O(log M/log8) 
+
+**complejidad total**
+
+O(n)+ O(log8 M) + O(n log8 M) = O(n log8 M) 
