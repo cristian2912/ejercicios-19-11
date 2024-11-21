@@ -1,85 +1,56 @@
 # Primer punto
 
-**usando radix sort y counting sort**
 
-**codigo:**
+**codigo paso a paso**
 
-**codigo saltandonos el paso a paso:**
 
 ```
-#include <stdio.h>
-#include <stdlib.h>
+def obtener_digit(num, posicion):
+    # esta funcion saca el digito en la posicion que le pasemos
+    return (num // (8 ** posicion)) % 8
 
-#define BASE 8 // base octal
+def radix_sort_octal(lista):
+    # primero miramos cual es el numero mas grande para saber cuantas veces tenemos que ordenar
+    max_num = max(lista)
+    max_posicion = 0
+    while max_num > 0:
+        max_num //= 8
+        max_posicion += 1
 
-// funcion para contar y ordenar los elementos por digitos
-void countingSort(int arr[], int n, int exp) {
-    int output[n];
-    int count[BASE] = {0};
+    # ahora ordenamos la lista, por cada "posicion" (unidades, decenas, centenas, etc.)
+    for pos in range(max_posicion):
+        # creamos 8 "buckets" (uno para cada digito posible en octal)
+        buckets = [[] for _ in range(8)]
 
-    // contar los digitos en la posicion actual
-    for (int i = 0; i < n; i++) {
-        int digit = (arr[i] / exp) % BASE;
-        count[digit]++;
-    }
+        # metemos los numeros en los "buckets" segun el digito en esa posicion
+        for num in lista:
+            digit = obtener_digit(num, pos)
+            buckets[digit].append(num)
 
-    // ajustar los indices para que representen las posiciones correctas
-    for (int i = 1; i < BASE; i++) {
-        count[i] += count[i - 1];
-    }
+        # reconstruimos la lista con los numeros ordenados por el digito de esa posicion
+        lista = []
+        for bucket in buckets:
+            lista.extend(bucket)
 
-    // construir el arreglo ordenado usando los indices
-    for (int i = n - 1; i >= 0; i--) {
-        int digit = (arr[i] / exp) % BASE;
-        output[count[digit] - 1] = arr[i];
-        count[digit]--;
-    }
+        # imprimimos el estado de la lista despues de ordenar por esta posicion
+        print(f"Despues de ordenar por la {pos+1}a posicion (octal): {lista}")
 
-    // copiar el resultado de vuelta al arreglo original
-    for (int i = 0; i < n; i++) {
-        arr[i] = output[i];
-    }
-}
+    return lista
 
-// funcion principal del radix sort
-void radixSort(int arr[], int n) {
-    // buscar el maximo para saber cuantos digitos tiene
-    int max = arr[0];
-    for (int i = 1; i < n; i++) {
-        if (arr[i] > max) {
-            max = arr[i];
-        }
-    }
-
-    // ordenar para cada digito desde el menos significativo
-    for (int exp = 1; max / exp > 0; exp *= BASE) {
-        countingSort(arr, n, exp);
-    }
-}
-
-int main() {
-    int arr[] = {75, 56, 17, 34, 10, 64, 7, 120};
-    int n = sizeof(arr) / sizeof(arr[0]);
-
-    // imprimir el arreglo original
-    printf("arreglo original:\n");
-    for (int i = 0; i < n; i++) {
-        printf("%d ", arr[i]);
-    }
-    printf("\n");
-
-    // ordenar el arreglo
-    radixSort(arr, n);
-
-    // imprimir el arreglo ordenado
-    printf("arreglo ordenado:\n");
-    for (int i = 0; i < n; i++) {
-        printf("%d ", arr[i]);
-    }
-    printf("\n");
-
-    return 0;
-}
+# ejemplo de uso
+numeros = [72, 35, 15, 9, 100, 60, 21]
+# convertimos los numeros a 3 digitos en octal (por ejemplo: 72 -> 072)
+numeros_octal = [int(oct(num)[2:].zfill(3), 8) for num in numeros]
+print("Lista original:", numeros)
+ordenados = radix_sort_octal(numeros_octal)
+print("Lista ordenada:", ordenados)
 ```
 
+**Resultado esperado:**
 
+Lista original: [72, 35, 15, 9, 100, 60, 21]
+Despues de ordenar por la 1a posicion (octal): [72, 9, 35, 100, 60, 21, 15]
+Despues de ordenar por la 2a posicion (octal): [72, 9, 15, 21, 35, 100, 60]
+Despues de ordenar por la 3a posicion (octal): [9, 15, 21, 35, 60, 72, 100]
+Lista ordenada: [9, 15, 21, 35, 60, 72, 100]
+ 
